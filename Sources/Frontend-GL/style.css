@@ -1,0 +1,36 @@
+/* General */
+p
+{
+	font-size: 16px;
+}
+
+h3
+{
+	font-size: 20px;
+}
+
+h4
+{
+	font-size: 18px;
+}
+
+/* Home */
+.ui.text.menu
+{
+	margin: 50px 0 0 0;
+	border-top-width: 2px;
+	border-top-style: solid;
+}
+
+.ui.text.menu .item
+{
+	padding: 12px 16px;
+}
+
+/* Search customer */
+
+.searchresult
+{
+	margin-top: 70px;
+	margin-bottom: 100px;
+}

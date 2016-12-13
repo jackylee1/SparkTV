@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Create Customer | Spark TV</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="The project of Typer" />
+    
+    <link rel="stylesheet" type="text/css" href="./semantic/dist/semantic.min.css">
+    <script src="./semantic/dist/semantic.min.js"></script>
+    <script src="./jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+
+  <body >
+    <div class="ui secondary pointing menu">
+      <div class="header item">Spark TV</div>
+        <div class="right menu">
+            <a class="active item" href="#">Home</a>
+        </div>
+    </div>
+    <div class="main ui container">
+        <div class="ui grid" style="margin-top: 50px">
+            <div class="ten wide centered column">
+                <div class="ui attached message">
+                    <div class="header">Welcome to our site!</div>
+                    <p>Fill out the form below to create a new customer</p>
+                </div>
+                <div class="ui form attached segment" ng-app="createCustomerApp" ng-controller="HttpController">
+                    <div class="field">
+                        <label>Name</label>
+                        <div class="two fields">
+                            <div class="field"><input type="text" ng-model="firstname" placeholder="First Name"></div>
+                            <div class="field"><input type="text" ng-model="lastname" placeholder="Last Name"></div>
+                        </div>
+                        <div class="two fields">
+                            <div class="field">
+                                <input type="text" ng-model="email" placeholder="Email">
+                            </div>
+                            <div class="field"><input type="text" ng-model="phonenumber" placeholder="Phone Number"></div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Address</label>
+                        <div class="field">
+                            <input type="text" name="address" id="autocomplete" onfocus="geolocate()" placeholder="Search address to auto complete"/>
+                        </div>
+                        <div class="ui horizontal divider">or enter manually</div>
+                        <div class="fields">
+                            <div class="three wide field">
+                                <input type="text" id="street_number" ng-model="num" placeholder="No.">
+                            </div>
+                            <div class="thirteen wide field">
+                                <input type="text" id="route" ng-model="street" placeholder="Street">
+                            </div>
+                        </div>
+                        <div class="three fields">
+                            <div class="field">
+                                <input type="text" name="apt" ng-model="apt" placeholder="Apt No.">
+                            </div>
+                            <div class="field">
+                                <input type="text" id="locality" ng-model="city" placeholder="City">
+                            </div>
+                            <div class="field">
+                                <input type="text" id="postal_code" ng-model="zipcode" placeholder="Zipcode"/>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="ui primary button" ng-click="saveCustomer()">Create</button>
+                </div>
+                <div class="ui bottom attached negative message" style="display: none">
+                    <i class="icon remove"></i>
+                    <span id="error-msg"></span>
+                </div>
+                <div class="ui bottom attached success message" style="display: none">
+                    <i class="icon hand peace"></i>Customer successfully created! Please <a href="login.html">log in</a>.
+                </div>
+            </div>
+              
+        </div>
+    </div>
+
+    <div class="ui text menu"><div class="item copyright">Copyright &copy; 2016 Typer. All rights reserved.</div></div>
+
+    <script>
+    var app = angular.module("createCustomerApp", []);
+        app.controller("HttpController", function ($scope, $http) {
+
+            $scope.saveCustomer = function () {
+                if(!checkNull($scope.firstname, $scope.lastname, $scope.email, $scope.phonenumber, 
+                              $scope.num, $scope.street, $scope.apt, $scope.city, $scope.zipcode))
+                    return;
+                if(!checkPhonenumber($scope.phonenumber)) return;
+                // todo check address
+
+                var custdata = $.param({
+                    email : $scope.email,
+                    firstname : $scope.firstName,
+                    lastname : $scope.lastName,
+                    phonenumber : $scope.phonenumber
+                });
+
+                var addrdata = $.param({
+                    street : $scope.street,
+                    apt : $scope.apt,
+                    city : $scope.city,
+                    zipcode : $scope.zipcode
+                });
+
+                var config = {
+                    headers : {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin' : '*',
+                        'Access-Control-Allow-Headers' : 'Content-Type, Access-Control-Allow-Origin'
+                    }
+                }
+
+                $http.post('https://oqw8vpic39.execute-api.us-east-1.amazonaws.com/v1/demo/customers', custdata, config)
+                .success(function (data, status, headers, config) {
+                    $(".negative.message").hide();
+                    $(".success.message").show();
+                })
+                .error(function (data, status, header, config) {
+                    $(".success.message").hide();
+                    $("#error-msg").html('Failed to create new customer because email not valid'/* + data.error\ message*/ + '.');
+                    $(".negative.message").show();
+                });
+
+                // todo save address
+            };
+        });
+
+        $("input[name='phonenumber']").blur(function(){
+            checkPhonenumber($(this).val());
+        });
+
+        function checkNull(firstnameVal, lastnameVal, emailVal, phonenumberVal, numVal, streetVal, aptVal, cityVal, zipcodeVal) {
+            console.log('in check, ' + aptVal);
+            if(firstnameVal == ""|| lastnameVal == ""|| emailVal == "" || phonenumberVal == "" || numVal == "" || aptVal == "" || streetVal == "" || cityVal == "" || zipcodeVal == "") {
+                $('#error-msg').html('All fields are required.');
+                $('.negative.message').show();
+                $('.success.message').hide();
+                return false;
+            }
+            return true;
+        };
+
+        function checkPhonenumber(phonenumber) {
+            $(".negative.message").hide();
+            var regex = /^\d{10}$/;
+            if(regex.test(phonenumber)) return true;
+            else {
+                $(".success.message").hide();
+                $("#error-msg").html('Invalid phone number.');
+                $(".negative.message").show();
+                return false;
+            }
+        };
+
+        // todo save address
+        function checkAddress(address) {
+            //var addrUrl = "https://oqw8vpic39.execute-api.us-east-1.amazonaws.com/v1/demo/customers";
+            //var addressVal = numVal + streetVal + cityVal + stateVal + zipcodeVal + countryVall;
+            //if(!checkAddress(aVal)) return;
+
+            /*
+            {
+                "operation": "create",
+                "tableName": "customers",
+                "payload": {
+                    "item": {"fistname":"emily","lastname":"hua","phonenumber":"3472782514","email":"huaye1992@gmail.com"}
+                }
+            }
+            */
+        };
+    </script>
+
+    <script>
+      // This example displays an address form, using the autocomplete feature
+      // of the Google Places API to help users fill in the information.
+
+      // This example requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+      var placeSearch, autocomplete;
+      var componentForm = {
+        street_number: 'short_name',
+        route: 'long_name',
+        locality: 'long_name',
+        postal_code: 'short_name'
+      };
+
+      function initAutocomplete() {
+        // Create the autocomplete object, restricting the search to geographical
+        // location types.
+        autocomplete = new google.maps.places.Autocomplete(
+            /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
+            {types: ['geocode']});
+
+        // When the user selects an address from the dropdown, populate the address
+        // fields in the form.
+        autocomplete.addListener('place_changed', fillInAddress);
+      }
+
+      function fillInAddress() {
+        // Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+
+        
+        // Get each component of the address from the place details
+        // and fill the corresponding field on the form.
+        //var street = place.address_components[0][componentForm["street_number"]] + " " + place.address_components[1][componentForm["route"]];
+        //document.getElementById("street").placeholder = street;
+
+        for (var i = 0; i < place.address_components.length; i++) {
+          var addressType = place.address_components[i].types[0];
+          if (componentForm[addressType]) {
+            var val = place.address_components[i][componentForm[addressType]];
+            document.getElementById(addressType).value = val;
+          }
+        }
+      }
+
+      // Bias the autocomplete object to the user's geographical location,
+      // as supplied by the browser's 'navigator.geolocation' object.
+      function geolocate() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var geolocation = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            var circle = new google.maps.Circle({
+              center: geolocation,
+              radius: position.coords.accuracy
+            });
+            autocomplete.setBounds(circle.getBounds());
+          });
+        }
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFZE7t7SgFOm4vPhOpxogH8Cyvy-ge2SY&libraries=places&callback=initAutocomplete"
+        async defer></script>
+  </body>
+</html>

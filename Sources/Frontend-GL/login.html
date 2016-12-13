@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Log in | Spark TV</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="description" content="The project of Typer" />
+
+        <link rel="stylesheet" type="text/css" href="./semantic/dist/semantic.min.css">
+        <script src="./semantic/dist/semantic.min.js"></script>
+		<script src="./jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+      <div class="ui secondary pointing menu">
+      	<div class="header item">Spark TV</div>
+		  <div class="right menu">
+			  <a class="item" href="#">Home</a>
+		  </div>
+	  </div>
+
+	  <div class="main ui container">
+			<div class="ui grid" style="margin-top: 50px">
+            	<div class="four wide centered column">
+					<form class="ui form">
+						<div class="field">
+							<div class="ui left icon input">
+							<input type="text" placeholder="Email">
+							<i class="user icon"></i>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui left icon input">
+							<input type="password" placeholder="Password">
+							<i class="lock icon"></i>
+							</div>
+						</div>
+						<button class="ui primary basic button">Log in</button>
+					</form>
+					<div class="ui horizontal divider">Or</div>
+					<button class="ui facebook fluid button" onclick="fblogin();"><i class="facebook icon"></i>Log in with Facebook</button>
+					<a class="ui green fluid button" href="createCustomer.html" style="margin-top: 5px;">Sign Up</a>
+				</div>
+			</div>
+	  </div>
+	  <span id="status"></span>
+
+		<div class="ui text menu">
+    	  <div class="item copyright">Copyright &copy; 2016 Typer. All rights reserved.</div>
+		</div>
+
+		<script>
+		window.fbAsyncInit = function() {
+			FB.init({
+				appId      : '1156254427788185',
+				xfbml      : true,
+				version    : 'v2.8'
+			});
+			FB.AppEvents.logPageView();
+		};
+
+		(function(d, s, id){
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/en_US/sdk.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+
+		function fblogin() {
+			FB.login(function(response){
+				if (response.status === 'connected') {
+					// Logged into your app and Facebook.
+					getInfo();
+				} else if (response.status === 'not_authorized') {
+					// The person is logged into Facebook, but not your app.
+				} else {
+					// The person is not logged into Facebook, so we're not sure if
+					// they are logged into this app or not.
+				}
+			});
+		};
+
+		function getInfo() {
+			FB.api('/me', 'GET', {fields: 'first_name, last_name, email, fieldname_of_type_Location'}, function(response) {
+				document.getElementById('status').innerHTML = JSON.stringify(response);
+			});
+		}
+		</script>
+		<script>
+        FB.login(function(response) {
+          if (response.session && response.perms) {
+            alert(response.perms);
+          }
+        });
+        <script>
+	</body>
+</html>

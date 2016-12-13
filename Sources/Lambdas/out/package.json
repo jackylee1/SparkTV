@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "request": "^2.78.0",
+    "request-promise": "^4.1.1"
+  }
+}
