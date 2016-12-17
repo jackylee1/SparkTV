@@ -94,19 +94,19 @@
                 if(!checkPhonenumber($scope.phonenumber)) return;
                 // todo check address
 
-                var custdata = $.param({
+                var custdata = {
                     email : $scope.email,
-                    firstname : $scope.firstName,
-                    lastname : $scope.lastName,
+                    firstname : $scope.firstname,
+                    lastname : $scope.lastname,
                     phonenumber : $scope.phonenumber
-                });
+                };
 
-                var addrdata = $.param({
+                var addrdata = {
                     street : $scope.street,
                     apt : $scope.apt,
                     city : $scope.city,
                     zipcode : $scope.zipcode
-                });
+                };
 
                 var config = {
                     headers : {
@@ -123,7 +123,7 @@
                 })
                 .error(function (data, status, header, config) {
                     $(".success.message").hide();
-                    $("#error-msg").html('Failed to create new customer because email not valid'/* + data.error\ message*/ + '.');
+                    $("#error-msg").html('Failed to create new customer because ' + data["error message"]);
                     $(".negative.message").show();
                 });
 
