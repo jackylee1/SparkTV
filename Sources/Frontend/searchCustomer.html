@@ -134,7 +134,7 @@
 	var app = angular.module("searchCustomerApp", []);
         app.controller("HttpController", function ($scope, $http) {
         	$scope.searchCustomer = function () {
-                $http.get('https://oqw8vpic39.execute-api.us-east-1.amazonaws.com/v1/demo/customers/' + $scope.searchemail)
+                $http.get('https://br1l3wine3.execute-api.us-east-1.amazonaws.com/swaggerv3/demo/customers/' + $scope.searchemail)
                 .then(function(response) {
                 	if(response.data) {
                 		$scope.firstname = response.data["firstname"];
@@ -175,19 +175,19 @@
                 if(!checkPhonenumber($("input[name='phonenumber']").val())) return;
             	// todo check address
 
-                var custdata = $.param({
+                var custdata = {
                     email : $scope.email,
                     firstname : $scope.firstName,
                     lastname : $scope.lastName,
                     phonenumber : $scope.phonenumber
-                });
+                };
 
-                var addrdata = $.param({
+                var addrdata = {
                     street : $scope.street,
                     apt : $scope.apt,
                     city : $scope.city,
                     zipcode : $scope.zipcode
-                });
+                };
 
                 var config = {
                     headers : {
@@ -197,14 +197,14 @@
                     }
                 }
 
-                $http.post('https://oqw8vpic39.execute-api.us-east-1.amazonaws.com/v1/demo/customers', custdata, config)
+                $http.post('https://br1l3wine3.execute-api.us-east-1.amazonaws.com/swaggerv3/demo/customers', custdata, config)
                 .success(function (data, status, headers, config) {
                     $(".negative.message").hide();
 					$(".success.message").show();
                 })
                 .error(function (data, status, header, config) {
                     $(".success.message").hide();
-					$("#error-msg").html('Failed to create new customer, please try again later.');
+					$("#error-msg").html('Failed to update customer profile because ' + data["error message"]);
 					$(".negative.message").show();
                 });
 
