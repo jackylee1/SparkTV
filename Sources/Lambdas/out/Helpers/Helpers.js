@@ -4,6 +4,9 @@ function tryFind(payload, key, def) {
         if (payload[key]) {
             return payload[key];
         }
+        else if (payload.payload && payload.payload[key]) {
+            return payload.payload[key];
+        }
         else if (payload.item && payload.item[key]) {
             return payload.item[key];
         }

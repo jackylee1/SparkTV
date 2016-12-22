@@ -20,7 +20,9 @@
     "gulp-lambda-deploy": "0.0.2",
     "gulp-typescript": "^3.0.0",
     "gulp-zip": "^3.2.0",
-    "typescript": "^2.0.3"
+    "typescript": "^2.0.3",
+    "sha1": "^1.1.1"
   },
-  "dependencies": {}
+  "dependencies": {
+  }
 }

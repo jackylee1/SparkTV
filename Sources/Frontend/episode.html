@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Episode | Spark TV</title>
+        <title>Episode | DoodleTV</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <meta name="description" content="The project of Typer" />
@@ -13,7 +13,7 @@
     </head>
     <body>
       <div class="ui secondary pointing menu">
-      	<div class="header item">Spark TV</div>
+      	<div class="header item">DoodleTV</div>
 		  <div class="right menu">
 			  <a class="active item" href="#">Home</a>
 		  </div>
@@ -26,7 +26,7 @@
 		    <div class="content">
 		      <div class="header">Emily Hua</div>
 		      <div class="description">
-		        Cofounder of Spark TV
+		        Cofounder of DoodleTV
 		      </div>
 		    </div>
 		    <div class="ui bottom attached button">
@@ -38,7 +38,7 @@
 		    <div class="content">
 		      <div class="header">Ming Zhou</div>
 		      <div class="description">
-		        Cofounder of Spark TV
+		        Cofounder of DoodleTV
 		      </div>
 		    </div>
 		    <div class="ui bottom attached button">
@@ -50,7 +50,7 @@
 		    <div class="content">
 		      <div class="header">Tongyun Wu</div>
 		      <div class="description">
-		         Cofounder of Spark TV
+		         Cofounder of DoodleTV
 		      </div>
 		    </div>
 		    <div class="ui bottom attached button">
@@ -62,7 +62,7 @@
 		    <div class="content">
 		      <div class="header">Zhi Zheng</div>
 		      <div class="description">
-		         Cofounder of Spark TV
+		         Cofounder of DoodleTV
 		      </div>
 		    </div>
 		    <div class="ui bottom attached button">
@@ -74,7 +74,7 @@
 		    <div class="content">
 		      <div class="header">Guanlin Zhou</div>
 		      <div class="description">
-		         Cofounder of Spark TV
+		         Cofounder of DoodleTV
 		      </div>
 		    </div>
 		    <div class="ui bottom attached button">
@@ -87,34 +87,116 @@
 		<div class="ui cards">
 		  <div class="card">
 		    <div class="content">
-		      <div class="header">Emily commented on episode</div>
+		      <div class="header">Emily commented on Doctor Who Series 9 Episode 1</div>
 		      <div class="description">
-		         <p>This episode is a piece of shit!This episode is a piece of shit!This episode is a piece of shit!This episode is a piece of shit!This episode is a piece of shit!</p>
+						
+						 <p> <span id="comment-value-emily"></span></p>
 		      </div>
-		    </div>
+
+					 	 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+						 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+						 <script>
+      				$(document).ready(function() {
+            	$.ajax({
+              			url: "https://br1l3wine3.execute-api.us-east-1.amazonaws.com/swaggerv3/demo/comment/1",
+              			success: function(json) {
+                $("#comment-value-emily").text(json.comment);
+              }
+        });
+      });
+    </script>
+		</div>
 		</div>
 
 		<div class="card">
 		  <div class="content">
-		    <div class="header">Ming commented on episode</div>
-		    <div class="description">
-		      <p>This episode is a piece of shit!</p>
+		    <div class="header">Ivy Chen commented on Doctor Who Series 9 Episode 1</div>
+		    <div class="description">			
+		      <p><span id="comment-value-ivy"></p>
 		    </div>
+    				 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+						 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+						 <script>
+      				$(document).ready(function() {
+            	$.ajax({
+              			url: "https://br1l3wine3.execute-api.us-east-1.amazonaws.com/swaggerv3/demo/comment/2",
+              			success: function(json) {
+                $("#comment-value-ivy").text(json.comment);				 
+              }
+            });
+      });
+			</script>
 		  </div>
 		</div>
 
-
-		</div>
-
-		
-
-	  </div>
-
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-offset-4 col-xs-4 col-sm-offset-4 col-sm-3 col-md-offset-5 col-md-2 pagination-centered text-center">
+          <h3>Recommend</h3>
+          <input id="btn-show-episode" type="button" class="btn btn-primary" value='Episode'>
+					<input id="btn-show-friend" type="button" class="btn btn-primary" value='Friend'>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-offset-4 col-xs-4 col-sm-offset-4 col-sm-3 col-md-offset-5 col-md-2">
+          <p>You may also like: <span id="episode-value"></span></p>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#btn-show-episode').on('click', function() {
+            $.ajax({
+							type : "POST",
+              url : "http://contentcatalog:mL1CSF2PKYTtPkGMdRnv@hobby-hhimaappojekgbkebdhlnhol.dbs.graphenedb.com:24789/db/data/transaction/commit",
+							accepts : { json: "application/json" },
+							dataType : "json",
+							contentType : "application/json",
+							data: JSON.stringify({ "statements" :[{"statement":"MATCH (me:user {email:'huaye1994@gmail.com'})-[myrating:RATE]->(myratedepisode:content)\nMATCH (other:user)-[theirrating:RATE]->(myratedepisode)\nWHERE me <> other\nAND abs(myrating.score - theirrating.score) < 2\nWITH other, myratedepisode\nMATCH (other)-[otherrating:RATE]->(episode:content)\nWHERE myratedepisode <> episode\nWITH avg(otherrating.score) AS avgRating, episode\nRETURN episode\nORDER BY avgRating desc\nLIMIT 3", "params": {} }]}) ,
+              success: function(response) {
+								console.log(response.results[0].data);
+								//$("#episode-value").text(JSON.stringify(response.results[0].data[3]));
+								var episodes = "";
+								for (var index in response.results[0].data){
+									   episodes += response.results[0].data[index].row[0].name + " | "
+								};
+								$("#episode-value").text(episodes);
+							
+              }
+            });
+        });
+      });
+    </script>
+		    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#btn-show-friend').on('click', function() {
+            $.ajax({
+							type : "POST",
+              url : "http://contentcatalog:mL1CSF2PKYTtPkGMdRnv@hobby-hhimaappojekgbkebdhlnhol.dbs.graphenedb.com:24789/db/data/transaction/commit",
+							accepts : { json: "application/json" },
+							dataType : "json",
+							contentType : "application/json",
+							data: JSON.stringify({ "statements" :[{"statement":"MATCH  (me:user)-[:FRIEND]-(myFriend:user)-[:FRIEND]-(friendOfFriend:user) \nMATCH (me:user) -[:LIKE] -> (episode:content)\nMATCH (friendOfFriend) - [:LIKE] -> (episode)\nWITH friendOfFriend, count(episode) as nOfCommonLikes, collect(episode) as episodes, me\nWHERE NOT (me)-[:FRIEND]-(friendOfFriend:Person) AND me.email = 'huaye1994@gmail.com' AND nOfCommonLikes >= 1\nRETURN friendOfFriend as suggestedFriend;", "params": {} }]}) ,
+              success: function(response) {
+								console.log(response.results[0].data);
+								//$("#episode-value").text(JSON.stringify(response.results[0].data[3]));
+								var episodes = "";
+								for (var index in response.results[0].data){
+									   episodes += response.results[0].data[index].row[0].name + " | "
+								};
+								$("#episode-value").text(episodes);
+							
+              }
+            });
+        });
+      });
+    </script>
 	  
 
-		<script>
-		$(document).ready(function(){
-		});
-		</script>
+
 	</body>
 </html>

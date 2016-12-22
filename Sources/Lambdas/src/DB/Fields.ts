@@ -1,16 +1,41 @@
-var customersFields = ['email', 'firstname', 'lastname', 'phonenumber', 'delivery_point_barcode'];
-var addressesFields = ['delivery_point_barcode', 'city', 'street', 'num', 'zipcode'];
+const customersFields = ['email', 'password', 'firstname', 'lastname', 'phonenumber', 'delivery_point_barcode'];
+const addressesFields = ['delivery_point_barcode', 'city', 'street', 'num', 'zipcode'];
 
-var customersChecks = ['email'];
-var addressesChecks = ['zipcode'];
+// contentInstance is the type from ContentInstances
+const commentFields = ['UUID', 'comment', 'contentInstance', 'contentInstanceID', 'userID'];
 
-export var customersTableName = 'customers';
-export var addressesTableName = 'addresses';
+const propertyFields = ['UUID', 'name'];
+const franchiseFields = ['UUID', 'name', 'propertyID'];
+const seriesFields = ['UUID', 'name', 'franchiseID'];
+const episodeFields = ['UUID', 'name', 'seriesID'];
+
+const customersChecks = ['email'];
+const addressesChecks = ['zipcode'];
+
+const franchiseTraceback = 'property';
+const seriesTraceback = 'franchise';
+const episodeTraceback = 'series';
 
 export function getFields(tableName: string): string[] {
-    return eval(`${tableName}Fields`);
+    try {
+        return eval(`${tableName}Fields`);
+    } catch (ex) {
+        return [];
+    }
 }
 
 export function getFieldsToCheck(tableName: string): string[] {
-    return eval(`${tableName}Checks`);
+    try {
+        return eval(`${tableName}Checks`);
+    } catch (ex) {
+        return [];
+    }
+}
+
+export function getTraceback(tableName: string): string {
+    try {
+        return eval(`${tableName}Traceback`);
+    } catch (ex) {
+        return undefined;
+    }
 }

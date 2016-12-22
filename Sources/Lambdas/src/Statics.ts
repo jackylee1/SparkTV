@@ -4,3 +4,5 @@ export const SmartyStreetUrl = `https://us-street.api.smartystreets.com/street-a
 export const SS_StreetPrefix = '&street=';
 export const SS_CityPrefix = '&city=';
 export const SS_ZipCodePrefix = '&zipcode=';
+
+export const Neo4jUrl = 'http://contentcatalog:mL1CSF2PKYTtPkGMdRnv@hobby-hhimaappojekgbkebdhlnhol.dbs.graphenedb.com:24789/db/data/transaction/commit';

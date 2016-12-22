@@ -1,5 +1,5 @@
 "use strict";
-const aws_sdk_1 = require("aws-sdk");
+const aws_sdk_1 = require('aws-sdk');
 function composePromise(method, params) {
     return new Promise((resolve, reject) => method(params, (err, res) => {
         if (err)

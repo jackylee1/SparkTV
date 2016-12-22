@@ -17,7 +17,7 @@ export async function requestValidAddr(payload: any): Promise<ISmartyStreetRespo
 
     let suggestions = JSON.parse(r);
     if (suggestions.length === 0) throw 'Invalid Address.';
-    else if (suggestions.length > 1) throw `Incomplete Address.`;
+    else if (suggestions.length > 1) throw 'Incomplete Address.';
     else {
         let sug = suggestions[0];
         return {
