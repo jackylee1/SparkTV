@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Homepage | DoodleTV</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="description" content="The project of Typer" />
+
+        <link rel="stylesheet" type="text/css" href="./semantic/dist/semantic.min.css">
+        <script src="./semantic/dist/semantic.min.js"></script>
+		<script src="./jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    </head>
+    <body>
+      <div class="ui secondary pointing menu">
+      	<div class="header item">DoodleTV</div>
+		  <div class="right menu">
+			  <a class="active item" href="#">Home</a>
+			  <a class="item" href="searchCustomer.html">Search customer</a>
+		  </div>
+	  </div>
+
+	  <div class="main ui container">
+		<h1 class="ui center aligned header welcome" style="margin:50px 0 50px 0;">Welcome to DoodleTV</h1>
+
+		<div class="ui grid login" style="margin-top: 50px">
+        	<div class="four wide centered column">
+				<!--<form class="ui form">
+					<div class="field">
+						<div class="ui left icon input">
+						<input type="text" placeholder="Email">
+						<i class="user icon"></i>
+						</div>
+					</div>
+					<div class="field">
+						<div class="ui left icon input">
+						<input type="password" placeholder="Password">
+						<i class="lock icon"></i>
+						</div>
+					</div>
+					<button class="ui primary basic button">Log in</button>
+				</form>
+				<div class="ui horizontal divider">Or</div>-->
+				<button class="ui facebook fluid button" onclick="fblogin();"><i class="facebook icon"></i>Log in with Facebook</button>
+				<a class="ui green fluid button" href="createCustomer.html" style="margin-top: 5px;">Sign Up</a>
+			</div>
+		</div>
+
+		<h4 style="margin-top:50px;">Your friends recommented on these episodes:</h4>
+		<div class="ui cards">
+		  <div class="card">
+		    <div class="content">
+		      <div class="header">Emily commented on Doctor Who Series 9 Episode 1</div>
+		      <div class="description">
+				<p> <span id="comment-value-emily"></span></p>
+		      </div>	 
+			</div>
+		  </div>
+
+			<div class="card">
+			  <div class="content">
+			    <div class="header">Ivy Chen commented on Doctor Who Series 9 Episode 1</div>
+			    <div class="description">			
+			      <p><span id="comment-value-ivy"></span></p>
+			    </div>
+	    				 
+			  </div>
+			</div>
+		</div>
+
+		<h4 class="friendstitle" style="margin-top:50px;"></h4>
+		<div class="ui cards friends"></div>
+
+		<h4 class="episodestitle" style="margin-top:50px;"></h4>
+		<div class="ui cards episodes"></div>
+
+	  </div>
+
+	
+	<script>
+		var emailAddr = "";
+
+		window.fbAsyncInit = function() {
+			FB.init({
+				appId      : '1234932106576628',
+				xfbml      : true,
+				version    : 'v2.8'
+			});
+			FB.AppEvents.logPageView();
+		};
+
+		(function(d, s, id){
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/en_US/sdk.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+
+		function fblogin() {
+			FB.login(function(response){
+				if (response.status === 'connected') {
+					// Logged into your app and Facebook.
+					getInfo();
+				} else if (response.status === 'not_authorized') {
+					// The person is logged into Facebook, but not your app.
+				} else {
+					// The person is not logged into Facebook, so we're not sure if
+					// they are logged into this app or not.
+				}
+			}, { scope: 'email' });
+		};
+
+		function getInfo() {
+			FB.api('/me', 'GET', {fields: 'first_name, last_name, email'}, function(response) {
+				emailAddr = response.email;
+				$(".login").hide();
+				$(".welcome").html("Welcome to DoodleTV, " + response.first_name + " " + response.last_name);
+
+				$.get({
+		      		url: "https://br1l3wine3.execute-api.us-east-1.amazonaws.com/swaggerv3/demo/recommendation?email=" + emailAddr + "&method=friend",
+		      		success: function(json) {
+		      			$(".friendstitle").html("Recommended friends");
+		        		$.each(json, function() {
+		        			$(".friends").append('<div class="card"><div class="content"><div class="header">' + this.name + '</div><div class="description">' + this.email + '</div></div></div>');
+		        		});
+		      		}
+		    	});
+
+		    	$.get({
+		      		url: "https://br1l3wine3.execute-api.us-east-1.amazonaws.com/swaggerv3/demo/recommendation?email=" + emailAddr + "&method=episode",
+		      		success: function(json) {
+		      			$(".episodestitle").html("Recommended episodes");
+		        		$.each(json, function() {
+		        			$(".episodes").append('<div class="card"><div class="content"><div class="description">' + this.name + '</div></div></div>');
+		        		});
+		      		}
+		    	});
+			});
+		}
+
+        $('#btn-show-friend').on('click', function() {
+            $.ajax({
+				type : "POST",
+    			crossDomain: true,
+                url : "http://contentcatalog:mL1CSF2PKYTtPkGMdRnv@hobby-hhimaappojekgbkebdhlnhol.dbs.graphenedb.com:24789/db/data/transaction/commit",
+				accepts : { json: "application/json" },
+				dataType : "json",
+				contentType : "application/json",
+				data: JSON.stringify({ "statements" :[{"statement":"MATCH  (me:user)-[:FRIEND]-(myFriend:user)-[:FRIEND]-(friendOfFriend:user) \nMATCH (me:user) -[:LIKE] -> (episode:content)\nMATCH (friendOfFriend) - [:LIKE] -> (episode)\nWITH friendOfFriend, count(episode) as nOfCommonLikes, collect(episode) as episodes, me\nWHERE NOT (me)-[:FRIEND]-(friendOfFriend:Person) AND me.email = 'huaye1994@gmail.com' AND nOfCommonLikes >= 1\nRETURN friendOfFriend as suggestedFriend;", "params": {} }]}) ,
+  				success: function(response) {
+					console.log(response.results[0].data);
+					//$("#episode-value").text(JSON.stringify(response.results[0].data[3]));
+					var episodes = "";
+					for (var index in response.results[0].data){
+						   episodes += response.results[0].data[index].row[0].name + " | "
+					};
+					$("#episode-value").text(episodes);	
+                }
+            });
+        });
+
+        $.ajax({
+  			url: "https://br1l3wine3.execute-api.us-east-1.amazonaws.com/swaggerv3/demo/comment/1",
+  			success: function(json) {
+    			$("#comment-value-emily").text(json.comment);
+			}
+    	});
+
+        $.ajax({
+      		url: "https://br1l3wine3.execute-api.us-east-1.amazonaws.com/swaggerv3/demo/comment/2",
+      		success: function(json) {
+        		$("#comment-value-ivy").text(json.comment);				 
+      		}
+    	});
+
+
+
+
+
+
+    	var app = angular.module("getEpisodeRecommendationApp", []);
+        app.controller("HttpController", function ($scope, $http) {
+        	$scope.searchCustomer = function () {
+                $http.get('https://br1l3wine3.execute-api.us-east-1.amazonaws.com/swaggerv3/demo/customers/' + $scope.searchemail)
+                .then(function(response) {
+                	if(response.data) {
+                		$scope.firstname = response.data["firstname"];
+	                    $scope.lastname = response.data["lastname"];
+	                    $scope.email = response.data["email"];
+	                    $scope.phonenumber = response.data["phonenumber"];
+	                    
+	                    $http.get(response.data.link["address"])
+		                .then(function(resp) {
+		                    $scope.street = resp.data["street"];
+		                    $scope.apt = resp.data["apt"];
+		                    $scope.city = resp.data["city"];
+		                    $scope.zipcode = resp.data["zipcode"];
+	                	});
+	                	$(".update-table").hide();
+						$(".noresult").hide();
+						$(".result-table").show();
+                	} else {
+                		$(".update-table").hide();
+						$(".result-table").hide();
+						$(".noresult").show();
+                	}
+                }, function(response) {
+			        $(".update-table").hide();
+					$(".result-table").hide();
+					$(".noresult").show();
+			    });
+            };
+
+            
+        });
+	</script>
+
+   </script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	</body>
+</html>
