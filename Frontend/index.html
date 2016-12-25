@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Homepage | DoodleTV</title>
+        <title>Homepage | Spark TV</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <meta name="description" content="The project of Typer" />
@@ -14,7 +14,7 @@
     </head>
     <body>
       <div class="ui secondary pointing menu">
-      	<div class="header item">DoodleTV</div>
+      	<div class="header item">Spark TV</div>
 		  <div class="right menu">
 			  <a class="active item" href="#">Home</a>
 			  <a class="item" href="searchCustomer.html">Search customer</a>
@@ -22,7 +22,7 @@
 	  </div>
 
 	  <div class="main ui container">
-		<h1 class="ui center aligned header welcome" style="margin:50px 0 50px 0;">Welcome to DoodleTV</h1>
+		<h1 class="ui center aligned header welcome" style="margin:50px 0 50px 0;">Welcome to Spark TV</h1>
 
 		<div class="ui grid login" style="margin-top: 50px">
         	<div class="four wide centered column">
@@ -116,7 +116,7 @@
 			FB.api('/me', 'GET', {fields: 'first_name, last_name, email'}, function(response) {
 				emailAddr = response.email;
 				$(".login").hide();
-				$(".welcome").html("Welcome to DoodleTV, " + response.first_name + " " + response.last_name);
+				$(".welcome").html("Welcome to Spark TV, " + response.first_name + " " + response.last_name);
 
 				$.get({
 		      		url: "https://br1l3wine3.execute-api.us-east-1.amazonaws.com/swaggerv3/demo/recommendation?email=" + emailAddr + "&method=friend",
